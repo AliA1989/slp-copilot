@@ -3,111 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Smart Lung Physio — Meeting Copilot</title>
+<title>SLP Meeting Copilot</title>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f4f6f9; min-height: 100vh; padding: 20px; color: #1a1a1a; }
-.container { max-width: 750px; margin: 0 auto; }
-.logo { font-size: 12px; font-weight: 700; color: #0F6E56; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; }
-h1 { font-size: 21px; font-weight: 700; margin-bottom: 4px; }
-.subtitle { font-size: 13px; color: #666; margin-bottom: 20px; }
-.card { background: white; border-radius: 12px; border: 1px solid #e5e5e5; padding: 20px; margin-bottom: 14px; }
+.container { max-width: 720px; margin: 0 auto; }
+.logo { font-size: 11px; font-weight: 700; color: #0F6E56; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+h1 { font-size: 20px; font-weight: 700; margin-bottom: 16px; }
+.card { background: white; border-radius: 12px; border: 1px solid #e5e5e5; padding: 18px; margin-bottom: 14px; }
 label { font-size: 11px; font-weight: 700; color: #888; display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
 input[type=password], input[type=text], textarea {
   width: 100%; font-family: inherit; font-size: 14px; padding: 10px;
   border: 1px solid #ddd; border-radius: 8px; background: #fafafa; color: #1a1a1a; outline: none;
 }
 input:focus, textarea:focus { border-color: #0F6E56; }
-textarea { resize: vertical; }
+textarea { resize: vertical; line-height: 1.6; }
 .btn-primary { background: #0F6E56; color: white; border: none; border-radius: 8px; padding: 12px 20px; font-size: 14px; font-weight: 600; width: 100%; margin-top: 10px; cursor: pointer; }
 .btn-primary:hover { background: #085041; }
-.btn-stop { background: #fff0f0; color: #c0392b; border: 1px solid #f5c6c6; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 500; cursor: pointer; }
 .btn-sm { background: white; border: 1px solid #ddd; border-radius: 8px; padding: 7px 14px; font-size: 12px; color: #1a1a1a; cursor: pointer; }
 .btn-sm:hover { background: #f5f5f5; }
-.btn-green { background: #0F6E56; color: white; border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; cursor: pointer; font-weight: 600; }
-.btn-green:hover { background: #085041; }
-.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 4px; }
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .mode-card { border: 1.5px solid #ddd; border-radius: 10px; padding: 14px; cursor: pointer; transition: all 0.15s; }
 .mode-card:hover, .mode-card.selected { border-color: #0F6E56; background: #f0faf5; }
-.mode-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.mode-icon { font-size: 20px; margin-bottom: 6px; }
+.mode-title { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
 .mode-desc { font-size: 12px; color: #777; line-height: 1.4; }
-.mode-icon { font-size: 22px; margin-bottom: 8px; }
-.header-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
-.badge-listening { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #0F6E56; }
-.badge-mode { font-size: 11px; background: #e8f5ee; color: #0F6E56; border-radius: 20px; padding: 3px 10px; font-weight: 600; }
-.dot { width: 8px; height: 8px; border-radius: 50%; background: #0F6E56; animation: pulse 1.2s infinite; flex-shrink: 0; }
-@keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
-.section-label { font-size: 11px; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
-.transcript-box { background: #fafafa; border-radius: 8px; padding: 12px; min-height: 80px; max-height: 160px; overflow-y: auto; font-size: 13px; line-height: 1.7; border: 1px solid #f0f0f0; }
-.interim { color: #bbb; }
-.empty { color: #bbb; font-style: italic; }
+.screen { display: none; }
+.screen.active { display: block; }
+.header-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.badge-mode { font-size: 11px; background: #e8f5ee; color: #0F6E56; border-radius: 20px; padding: 3px 12px; font-weight: 700; }
 
-/* QUICK NOTE BOX */
-.qnote-wrap { background: #fff8f0; border: 1.5px solid #f0c090; border-radius: 10px; padding: 14px; margin-bottom: 14px; }
-.qnote-label { font-size: 11px; font-weight: 700; color: #c07000; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
-.qnote-hint { font-size: 11px; color: #c07000; opacity: 0.7; font-weight: 400; text-transform: none; }
-.qnote-input-row { display: flex; gap: 8px; align-items: flex-end; }
-.qnote-input { flex: 1; font-family: inherit; font-size: 14px; padding: 9px 12px; border: 1px solid #e8c090; border-radius: 8px; background: white; color: #1a1a1a; outline: none; min-height: 44px; resize: none; }
-.qnote-input:focus { border-color: #c07000; }
-.btn-add { background: #c07000; color: white; border: none; border-radius: 8px; padding: 9px 14px; font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; height: 44px; }
-.btn-add:hover { background: #a05800; }
-.qnote-log { margin-top: 10px; max-height: 120px; overflow-y: auto; }
-.qnote-entry { font-size: 12px; color: #7a4800; background: #fff0d0; border-radius: 6px; padding: 5px 10px; margin-bottom: 4px; line-height: 1.5; }
-.qnote-entry .qn-time { color: #c0a070; font-size: 11px; margin-right: 6px; }
+/* GRANOLA IMPORT */
+.granola-bar { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; }
+.btn-granola { background: #1a1a2e; color: white; border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.btn-granola:hover { background: #2a2a4e; }
+.btn-granola:disabled { background: #888; cursor: not-allowed; }
+.granola-status { font-size: 12px; color: #888; }
+.granola-status.ok { color: #0F6E56; }
+.granola-status.err { color: #e74c3c; }
 
-.suggestion-item { background: #f0faf5; border-left: 3px solid #0F6E56; border-radius: 0 8px 8px 0; padding: 10px 14px; margin-bottom: 8px; font-size: 13px; line-height: 1.6; }
-.suggestion-why { font-size: 11px; color: #777; margin-top: 5px; font-style: italic; }
-.sfb { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 3px 10px; font-size: 12px; cursor: pointer; }
+/* PASTE AREA */
+.paste-area { width: 100%; min-height: 200px; max-height: 300px; font-size: 13px; padding: 12px; border: 1.5px dashed #ccc; border-radius: 8px; background: #fafafa; color: #1a1a1a; outline: none; font-family: inherit; line-height: 1.7; resize: vertical; }
+.paste-area:focus { border-color: #0F6E56; border-style: solid; background: white; }
+.paste-hint { font-size: 11px; color: #aaa; margin-top: 6px; }
+
+/* SUGGEST BUTTON */
+.btn-suggest { background: #0F6E56; color: white; border: none; border-radius: 10px; padding: 14px 20px; font-size: 15px; font-weight: 700; width: 100%; margin-top: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.15s; }
+.btn-suggest:hover { background: #085041; }
+.btn-suggest:disabled { background: #a0c8bb; cursor: not-allowed; }
+
+/* SUGGESTION OUTPUT */
+.suggestion-card { background: #f0faf5; border: 1.5px solid #0F6E56; border-radius: 10px; padding: 16px; font-size: 15px; line-height: 1.7; color: #1a1a1a; }
+.suggestion-why { font-size: 12px; color: #0F6E56; margin-top: 10px; font-style: italic; border-top: 1px solid #c5e8dc; padding-top: 8px; }
+.suggestion-fb { display: flex; gap: 8px; margin-top: 10px; }
+.sfb { background: white; border: 1px solid #ddd; border-radius: 6px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
 .sfb:hover { background: #f5f5f5; }
 .sfb.liked { background: #e8f5ee; border-color: #0F6E56; }
 .sfb.disliked { background: #fff0f0; border-color: #e74c3c; }
-.suggestion-feedback { display: flex; gap: 6px; margin-top: 8px; }
-.controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 4px; }
-.spinner { display: inline-block; width: 13px; height: 13px; border: 2px solid #ddd; border-top-color: #0F6E56; border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 6px; }
-@keyframes spin { to { transform: rotate(360deg); } }
-.screen { display: none; }
-.screen.active { display: block; }
-.tabs { display: flex; gap: 0; margin-bottom: 14px; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; }
-.tab { flex: 1; padding: 9px 4px; font-size: 12px; text-align: center; cursor: pointer; background: white; color: #666; border: none; }
-.tab.active { background: #0F6E56; color: white; font-weight: 600; }
-.brief-box { background: #eef7f4; border: 1px solid #b2ddd0; border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #0a4a3a; line-height: 1.7; }
+.empty-suggestion { color: #bbb; font-size: 13px; font-style: italic; text-align: center; padding: 24px 0; }
+
+/* BRIEF */
+.brief-box { background: #eef7f4; border: 1px solid #b2ddd0; border-radius: 8px; padding: 14px; font-size: 13px; color: #0a4a3a; line-height: 1.7; }
 .brief-box ul { padding-left: 18px; margin-top: 6px; }
 .brief-box li { margin-bottom: 4px; }
-.scoring-row { display: flex; gap: 6px; align-items: center; padding: 7px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; flex-wrap: wrap; }
-.score-btn { border: 1px solid #ddd; background: white; border-radius: 6px; padding: 3px 9px; font-size: 11px; cursor: pointer; }
+
+/* SCORING */
+.scoring-row { display: flex; gap: 6px; align-items: center; padding: 8px 0; border-bottom: 1px solid #f5f5f5; font-size: 13px; flex-wrap: wrap; }
+.score-btn { border: 1px solid #ddd; background: white; border-radius: 6px; padding: 4px 10px; font-size: 11px; cursor: pointer; }
 .score-good.active { background: #e8f5ee; border-color: #0F6E56; color: #0F6E56; font-weight: 600; }
 .score-weak.active { background: #fff8e1; border-color: #f0a500; color: #c07000; font-weight: 600; }
 .score-fail.active { background: #fff0f0; border-color: #e74c3c; color: #c0392b; font-weight: 600; }
-.q-label { flex: 1; min-width: 140px; }
-.fb-session { background: white; border: 1px solid #e5e5e5; border-radius: 10px; padding: 14px; margin-bottom: 10px; }
-.fb-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-.fb-mode { font-size: 11px; background: #e8f5ee; color: #0F6E56; border-radius: 20px; padding: 2px 8px; }
-.fb-date { font-size: 11px; color: #aaa; }
-.star-row { display: flex; gap: 4px; margin-bottom: 10px; }
-.star { font-size: 24px; cursor: pointer; color: #ddd; transition: color 0.1s; }
-.star.active { color: #f0a500; }
+.q-label { flex: 1; min-width: 150px; }
+
+/* TABS */
+.tabs { display: flex; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; margin-bottom: 14px; }
+.tab { flex: 1; padding: 9px 4px; font-size: 12px; text-align: center; cursor: pointer; background: white; color: #666; border: none; }
+.tab.active { background: #0F6E56; color: white; font-weight: 600; }
+
+.spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+.spinner-dark { border-color: rgba(0,0,0,0.15); border-top-color: #0F6E56; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
 .api-row { display: flex; gap: 8px; align-items: flex-end; }
 .api-row input { flex: 1; }
-.key-status { font-size: 11px; color: #0F6E56; margin-top: 4px; display: none; }
+.key-ok { font-size: 11px; color: #0F6E56; margin-top: 4px; display: none; }
+
+.meeting-picker { width: 100%; font-family: inherit; font-size: 13px; padding: 8px 10px; border: 1px solid #ddd; border-radius: 8px; background: #fafafa; color: #1a1a1a; outline: none; margin-bottom: 8px; display: none; }
 </style>
 </head>
 <body>
 <div class="container">
 
-<!-- SETUP SCREEN -->
+<!-- SETUP -->
 <div class="screen active" id="screen-setup">
   <div class="logo">Smart Lung Physio™</div>
   <h1>Meeting Copilot</h1>
-  <p class="subtitle">Real-time AI suggestions — personalized for your meetings</p>
 
   <div class="card">
-    <label>Anthropic API Key <span style="font-weight:400;text-transform:none;font-size:11px;color:#aaa;">— saved automatically</span></label>
+    <label>API Key <span style="font-weight:400;text-transform:none;font-size:11px;color:#aaa;">— saved automatically</span></label>
     <div class="api-row">
       <input type="password" id="api-key" placeholder="sk-ant-..." />
       <button class="btn-sm" onclick="saveKey()">Save</button>
     </div>
-    <div class="key-status" id="key-status">✓ Key saved</div>
-    <div style="margin-top:6px;font-size:11px;color:#aaa;">Get free key: <a href="https://console.anthropic.com" target="_blank" style="color:#0F6E56;">console.anthropic.com</a> → API Keys → Create Key</div>
+    <div class="key-ok" id="key-ok">✓ Key saved</div>
+    <div style="margin-top:5px;font-size:11px;color:#aaa;">Get free key: <a href="https://console.anthropic.com" target="_blank" style="color:#0F6E56;">console.anthropic.com</a></div>
   </div>
 
   <div class="card">
@@ -121,29 +120,24 @@ textarea { resize: vertical; }
       <div class="mode-card" onclick="selectMode('intern',this)">
         <div class="mode-icon">🎓</div>
         <div class="mode-title">Intern Interview</div>
-        <div class="mode-desc">Engineering candidates for R&D role</div>
+        <div class="mode-desc">Engineering candidates for R&D</div>
       </div>
     </div>
     <div style="margin-top:14px;">
       <label>Who are you meeting? (optional)</label>
-      <input type="text" id="extra-context" placeholder="e.g. Marion, VP Clinical Services, Responsive Health — 14 LTC homes, key decision maker" />
+      <input type="text" id="extra-context" placeholder="e.g. Marion, VP Clinical Services, Responsive Health — 14 LTC homes" />
     </div>
     <button class="btn-primary" onclick="startMeeting()">Start meeting</button>
   </div>
-  <div style="text-align:center;">
-    <button class="btn-sm" onclick="showHistory()">Past feedback →</button>
-  </div>
 </div>
 
-<!-- MEETING SCREEN -->
+<!-- MEETING -->
 <div class="screen" id="screen-meeting">
   <div class="header-bar">
-    <div class="badge-listening" id="listen-status">
-      <div class="dot"></div><span>Listening...</span>
-    </div>
+    <div class="logo" style="margin:0;">Smart Lung Physio™</div>
     <div style="display:flex;gap:8px;align-items:center;">
-      <div class="badge-mode" id="mode-badge">LTC Discovery</div>
-      <button class="btn-sm" onclick="endMeeting()">End meeting</button>
+      <div class="badge-mode" id="mode-badge">LTC</div>
+      <button class="btn-sm" onclick="resetApp()">New meeting</button>
     </div>
   </div>
 
@@ -151,49 +145,44 @@ textarea { resize: vertical; }
     <button class="tab active" onclick="switchTab('live')">Live</button>
     <button class="tab" onclick="switchTab('brief')">Brief</button>
     <button class="tab" id="tab-score-btn" onclick="switchTab('score')" style="display:none;">Score</button>
-    <button class="tab" onclick="switchTab('post')">Debrief</button>
   </div>
 
   <!-- LIVE TAB -->
   <div id="tab-live">
+    <div class="card">
+      <!-- GRANOLA IMPORT BAR -->
+      <div class="granola-bar">
+        <button class="btn-granola" id="granola-btn" onclick="importFromGranola()">
+          <span id="granola-btn-icon">📋</span>
+          <span id="granola-btn-text">Import from Granola</span>
+        </button>
+        <span class="granola-status" id="granola-status"></span>
+      </div>
 
-    <!-- QUICK NOTE BOX -->
-    <div class="qnote-wrap">
-      <div class="qnote-label">
-        ✍️ They said...
-        <span class="qnote-hint">— type what the other person said, press Enter or Add</span>
-      </div>
-      <div class="qnote-input-row">
-        <textarea class="qnote-input" id="qnote-input" rows="1" placeholder="e.g. we don't have budget for new devices... / staff ratio is the problem... / who else is involved?" onkeydown="qnoteKeydown(event)"></textarea>
-        <button class="btn-add" onclick="addQnote()">Add</button>
-      </div>
-      <div class="qnote-log" id="qnote-log"></div>
+      <!-- MEETING PICKER (shown after fetch) -->
+      <select class="meeting-picker" id="meeting-picker" onchange="loadSelectedMeeting()">
+        <option value="">Select meeting...</option>
+      </select>
+
+      <label>Transcript</label>
+      <textarea class="paste-area" id="transcript-paste" placeholder="Click 'Import from Granola' to load your latest meeting — or paste manually here."></textarea>
+      <div class="paste-hint">Import from Granola or paste manually — update anytime during the meeting</div>
     </div>
 
     <div class="card">
-      <p class="section-label">Your speech (live)</p>
-      <div class="transcript-box" id="transcript"><span class="empty">Waiting for your voice...</span></div>
-    </div>
-
-    <div class="card">
-      <p class="section-label">AI suggestions</p>
-      <div id="suggestion-box" style="min-height:80px;">
-        <p style="font-size:13px;color:#bbb;">Start talking or add what they said — suggestions appear automatically.</p>
+      <div id="suggestion-output">
+        <div class="empty-suggestion">Import or paste transcript → tap the button → get one suggestion</div>
       </div>
-    </div>
-
-    <div class="controls">
-      <button class="btn-stop" onclick="stopListening()">Pause mic</button>
-      <button class="btn-sm" onclick="resumeListening()">Resume mic</button>
-      <button class="btn-sm" onclick="clearAll()">Clear all</button>
-      <button class="btn-sm" onclick="getSuggestions()">Refresh</button>
+      <button class="btn-suggest" id="suggest-btn" onclick="getSuggestion()">
+        <span id="suggest-btn-content">💡 Get suggestion</span>
+      </button>
     </div>
   </div>
 
   <!-- BRIEF TAB -->
   <div id="tab-brief" style="display:none;">
     <div class="card">
-      <p class="section-label">Pre-meeting brief</p>
+      <label>Pre-meeting brief</label>
       <div class="brief-box" id="brief-content"></div>
     </div>
   </div>
@@ -201,107 +190,67 @@ textarea { resize: vertical; }
   <!-- SCORE TAB -->
   <div id="tab-score" style="display:none;">
     <div class="card">
-      <p class="section-label">Interview scoring</p>
+      <label>Interview scoring</label>
       <div id="scoring-rows"></div>
       <div style="margin-top:14px;font-size:13px;" id="score-result"></div>
     </div>
   </div>
-
-  <!-- DEBRIEF TAB -->
-  <div id="tab-post" style="display:none;">
-    <div class="card">
-      <p class="section-label">Post-meeting debrief</p>
-      <div id="post-content" style="font-size:13px;color:#bbb;white-space:pre-wrap;line-height:1.7;">End the meeting first, then click generate.</div>
-      <button class="btn-sm" onclick="generateDebrief()" style="margin-top:10px;">Generate debrief</button>
-    </div>
-  </div>
-</div>
-
-<!-- FEEDBACK SCREEN -->
-<div class="screen" id="screen-feedback">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-    <button class="btn-sm" onclick="backToSetup()">← Back</button>
-    <h1 style="font-size:18px;">Meeting Feedback</h1>
-  </div>
-  <div class="card" id="feedback-form">
-    <p class="section-label">How was this meeting?</p>
-    <div class="star-row" id="star-row">
-      <span class="star" onclick="rateMeeting(1)">★</span>
-      <span class="star" onclick="rateMeeting(2)">★</span>
-      <span class="star" onclick="rateMeeting(3)">★</span>
-      <span class="star" onclick="rateMeeting(4)">★</span>
-      <span class="star" onclick="rateMeeting(5)">★</span>
-    </div>
-    <label style="margin-bottom:6px;">Were AI suggestions helpful?</label>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button class="sfb" onclick="setSuggFb('yes',this)">👍 Yes</button>
-      <button class="sfb" onclick="setSuggFb('no',this)">👎 Not relevant</button>
-      <button class="sfb" onclick="setSuggFb('slow',this)">⏱ Too slow</button>
-    </div>
-    <label>What would make it better?</label>
-    <textarea id="fb-note" style="min-height:70px;" placeholder="e.g. Suggestions were too generic... loved how it caught the staff ratio objection..."></textarea>
-    <button class="btn-green" onclick="saveFeedback()" style="margin-top:12px;width:100%;">Save feedback</button>
-  </div>
-  <div id="feedback-history"></div>
 </div>
 
 </div>
 <script>
 const CONTEXT = {
   ltc: {
-    label: 'LTC Discovery',
+    label: 'LTC',
     system: `You are a real-time meeting copilot for Ali Abedinpour, CEO of Smart Lung Physio / Atabazh Medical Inc., doing customer discovery with LTC healthcare professionals in Canada.
 
 PRODUCT: Smart Lung Physio automates chest percussion therapy for LTC residents with pneumonia, COPD, and congestive heart failure.
 
-KEY INSIGHTS FROM PAST DISCOVERY:
+KEY INSIGHTS:
 - Staff ratio is #1 barrier: 1 nurse per 20-30 residents
-- No existing workflow for mucus clearance or chest percussion in LTC
+- No existing workflow for mucus clearance in LTC
 - Must integrate into existing EMR and devices already in use
-- Target: pneumonia, COPD, CHF — Ministry-classified "avoidable" hospital transfers
+- Target: pneumonia, COPD, CHF — Ministry "avoidable" hospital transfers
 - Marion (VP Clinical Services, Responsive Health) = key decision-maker for 14 homes
+- Evidence base for airway clearance in elderly is questioned — address proactively
 - Wound-care app EMR integration = benchmark model they like
-- Evidence base for airway clearance in elderly questioned — address proactively
 
-ALI'S GOALS: Validate pain points, find decision-maker path, get pilot agreement or observation visit. Sound like a researcher, not a salesman. Ask open questions, listen, validate.`
+ALI'S GOALS: Validate pain points, find decision-maker path, get pilot agreement. Sound like a researcher, not a salesman. Ask open questions, listen, validate.`
   },
   intern: {
-    label: 'Intern Interview',
-    system: `You are a real-time meeting copilot for Ali Abedinpour, CEO of Smart Lung Physio, interviewing engineering intern candidates for a 6-month R&D validation role (10-14 hrs/week).
+    label: 'Intern',
+    system: `You are a real-time meeting copilot for Ali Abedinpour, CEO of Smart Lung Physio, interviewing engineering intern candidates for a 6-month R&D validation role.
 
-PASS CRITERIA:
-Q1 BLE: ESP32 packets drop after 10min → PASS: MTU, connection interval, buffer, sequence numbers, BLE sniffer. FAIL: doesn't know MTU.
-Q2 Noise: Force sensor unstable ADC when motor runs → PASS: oscilloscope first, noise frequency, hardware fix then software. FAIL: no oscilloscope.
-Q3 Calibration: Prove repeatability → PASS: CV%=(std/mean)×100. FAIL: doesn't know CV%.
-Q4 Logging: 3 sensors over 60min → PASS: CSV with timestamp+sequence_number, delta_t plot. FAIL: never written data to file.
-Q5 Bug: Real hardware debugging → PASS: specific story, real tools, root cause. FAIL: all simulation.
-Q6 Availability: 10-14hrs/week 6 months → PASS: month-by-month breakdown. FAIL: "let's see".
+Q1 BLE: PASS = MTU, connection interval, buffer, sequence numbers. FAIL = doesn't know MTU.
+Q2 Noise: PASS = oscilloscope first, hardware fix then software. FAIL = no oscilloscope.
+Q3 Calibration: PASS = CV%=(std/mean)×100. FAIL = doesn't know CV%.
+Q4 Logging: PASS = CSV with timestamp+sequence_number. FAIL = never written data to file.
+Q5 Bug: PASS = specific story, real tools, root cause. FAIL = all simulation.
+Q6 Availability: PASS = month-by-month breakdown. FAIL = "let's see".
 RULE: Q1 AND Q2 must both pass to proceed.`
   }
 };
 
 const BRIEFS = {
-  ltc: `<b>Goal today:</b><ul><li>Validate pain points: staffing, workflows, avoidable transfers</li><li>Find decision-maker path</li><li>Position as time-saver, not new burden</li><li>Get concrete next step: pilot visit, intro to VP, follow-up</li></ul><b>Power questions:</b><ul><li>"What's your workflow when a resident shows respiratory symptoms?"</li><li>"How often are you seeing avoidable transfers for COPD or pneumonia?"</li><li>"If something flagged respiratory decline 24-48 hours earlier — how would that change things?"</li><li>"Who else needs to be involved before a pilot could happen?"</li></ul><b>Remember:</b><ul><li>Staff ratio = #1 concern — lead with time savings</li><li>Ask about EMR — integration is prerequisite</li><li>If they ask for evidence: "We're completing validation now — that's why I want a pilot"</li></ul>`,
-  intern: `<b>Order:</b><ul><li>Q1 → BLE Debugging (must pass)</li><li>Q2 → Sensor Noise (must pass)</li><li>Q3 → Calibration</li><li>Q4 → Data Logging</li><li>Q5 → Hardest Bug</li><li>Q6 → Availability</li></ul><b>Rules:</b><ul><li>Q1 + Q2 must both pass — if either fails, end politely</li><li>Ask "What tools exactly?" if answer sounds vague</li><li>Strong signal: mentions oscilloscope unprompted</li><li>Red flag: "changed things until it worked"</li></ul><b>After passing:</b> Send 48hr take-home: ESP32 + sensor + CSV + Python CV% script.`
+  ltc: `<b>Goal today:</b><ul><li>Validate pain points: staffing, workflows, avoidable transfers</li><li>Find decision-maker path</li><li>Get concrete next step: pilot visit, intro to Marion, follow-up</li></ul><b>Power questions:</b><ul><li>"What's your workflow when a resident shows respiratory symptoms?"</li><li>"How often are avoidable transfers happening for COPD or pneumonia residents?"</li><li>"If something flagged respiratory decline 24-48 hours earlier — how would that change things?"</li><li>"Who else needs to be involved before a pilot could happen?"</li></ul><b>Remember:</b><ul><li>Staff ratio = #1 concern — lead with time savings</li><li>Ask about EMR — integration is prerequisite</li><li>If they ask for evidence: "We're completing validation now — that's why I want a pilot"</li></ul>`,
+  intern: `<b>Order:</b><ul><li>Q1 → BLE (must pass)</li><li>Q2 → Sensor Noise (must pass)</li><li>Q3 → Calibration</li><li>Q4 → Data Logging</li><li>Q5 → Hardest Bug</li><li>Q6 → Availability</li></ul><b>Rules:</b><ul><li>Q1 + Q2 must both pass — if either fails, end politely</li><li>Ask "What tools exactly?" if answer sounds vague</li><li>Strong signal: mentions oscilloscope unprompted</li></ul><b>After passing:</b> Send 48hr take-home: ESP32 + sensor + CSV + Python CV% script.`
 };
 
 const INTERN_QS = ['Q1 — BLE Debugging','Q2 — Sensor Noise','Q3 — Calibration','Q4 — Data Logging','Q5 — Hardest Bug','Q6 — Availability'];
 
-let recognition=null, myTranscript=[], interimText='', qnotes=[];
-let apiKey='', selectedMode='ltc', extraContext='';
-let suggestionTimer=null, isListening=false, lastSuggestionAt=0;
-let scores={}, currentRating=0, suggFb='', currentSessionId=null;
+let apiKey='', selectedMode='ltc', extraContext='', scores={};
+let meetingsList = [];
 
 window.onload=()=>{
   const k=localStorage.getItem('slp_api_key');
-  if(k){document.getElementById('api-key').value=k;document.getElementById('key-status').style.display='block';}
+  if(k){document.getElementById('api-key').value=k;document.getElementById('key-ok').style.display='block';}
 };
 
 function saveKey(){
   const k=document.getElementById('api-key').value.trim();
-  if(!k){alert('Enter a key first.');return;}
+  if(!k){alert('Enter key first.');return;}
   localStorage.setItem('slp_api_key',k);
-  document.getElementById('key-status').style.display='block';
+  document.getElementById('key-ok').style.display='block';
 }
 
 function selectMode(mode,el){
@@ -313,165 +262,220 @@ function selectMode(mode,el){
 function startMeeting(){
   apiKey=document.getElementById('api-key').value.trim()||localStorage.getItem('slp_api_key')||'';
   extraContext=document.getElementById('extra-context').value.trim();
-  if(!apiKey){alert('Please enter and save your Anthropic API key first.');return;}
-  currentSessionId='s_'+Date.now();
-  qnotes=[]; myTranscript=[];
+  if(!apiKey){alert('Enter and save your API key first.');return;}
   document.getElementById('screen-setup').classList.remove('active');
   document.getElementById('screen-meeting').classList.add('active');
   document.getElementById('mode-badge').textContent=CONTEXT[selectedMode].label;
   document.getElementById('brief-content').innerHTML=BRIEFS[selectedMode];
-  document.getElementById('qnote-log').innerHTML='';
+  document.getElementById('transcript-paste').value='';
+  document.getElementById('suggestion-output').innerHTML='<div class="empty-suggestion">Import or paste transcript → tap the button → get one suggestion</div>';
   if(selectedMode==='intern'){document.getElementById('tab-score-btn').style.display='';buildScoringRows();}
   else document.getElementById('tab-score-btn').style.display='none';
   switchTab('live');
-  startRecognition();
 }
 
-// ---- QUICK NOTE ----
-function qnoteKeydown(e){
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();addQnote();}
-}
+// ---- GRANOLA IMPORT ----
+async function importFromGranola(){
+  const btn = document.getElementById('granola-btn');
+  const btnText = document.getElementById('granola-btn-text');
+  const btnIcon = document.getElementById('granola-btn-icon');
+  const status = document.getElementById('granola-status');
 
-function addQnote(){
-  const inp=document.getElementById('qnote-input');
-  const val=inp.value.trim();
-  if(!val)return;
-  const time=new Date().toLocaleTimeString('en-CA',{hour:'2-digit',minute:'2-digit'});
-  qnotes.push({text:val,time});
-  inp.value='';
-  renderQnotes();
-  scheduleSuggestion();
-}
+  btn.disabled = true;
+  btnIcon.innerHTML = '<span class="spinner" style="width:12px;height:12px;border-width:2px;border-color:rgba(255,255,255,0.3);border-top-color:white;"></span>';
+  btnText.textContent = 'Loading meetings...';
+  status.textContent = '';
+  status.className = 'granola-status';
 
-function renderQnotes(){
-  const log=document.getElementById('qnote-log');
-  if(!qnotes.length){log.innerHTML='';return;}
-  log.innerHTML=qnotes.slice(-6).map(n=>`<div class="qnote-entry"><span class="qn-time">${n.time}</span>${n.text}</div>`).join('');
-  log.scrollTop=log.scrollHeight;
-}
-
-// ---- RECOGNITION ----
-function startRecognition(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){document.getElementById('transcript').innerHTML='<span style="color:red">Use Chrome on desktop.</span>';return;}
-  recognition=new SR();
-  recognition.continuous=true;recognition.interimResults=true;recognition.lang='en-US';
-  recognition.onstart=()=>{isListening=true;document.getElementById('listen-status').innerHTML='<div class="dot"></div><span>Listening...</span>';};
-  recognition.onresult=(event)=>{
-    let interim='';
-    for(let i=event.resultIndex;i<event.results.length;i++){
-      const t=event.results[i][0].transcript;
-      if(event.results[i].isFinal){myTranscript.push(t.trim());scheduleSuggestion();}
-      else interim=t;
-    }
-    interimText=interim;renderTranscript();
-  };
-  recognition.onerror=(e)=>{
-    if(e.error==='not-allowed')document.getElementById('listen-status').innerHTML='<span style="color:red">Mic blocked — allow in Chrome settings</span>';
-  };
-  recognition.onend=()=>{if(isListening)setTimeout(()=>{try{recognition.start();}catch(e){}},300);};
-  recognition.start();
-}
-
-function stopListening(){
-  isListening=false;if(recognition)recognition.stop();
-  document.getElementById('listen-status').innerHTML='<span style="color:#aaa;">Mic paused</span>';
-}
-function resumeListening(){
-  if(!isListening){isListening=true;try{recognition.start();}catch(e){startRecognition();}}
-}
-
-function renderTranscript(){
-  const box=document.getElementById('transcript');
-  const full=myTranscript.join(' ');
-  const shown=full.length>1200?'...'+full.slice(-1200):full;
-  box.innerHTML=shown?shown+(interimText?' <span class="interim">'+interimText+'</span>':''):'<span class="empty">Waiting for your voice...</span>';
-  box.scrollTop=box.scrollHeight;
-}
-
-function clearAll(){
-  myTranscript=[];interimText='';qnotes=[];
-  renderTranscript();renderQnotes();
-  document.getElementById('suggestion-box').innerHTML='<p style="font-size:13px;color:#bbb;">Cleared.</p>';
-}
-
-// ---- SUGGESTIONS ----
-function scheduleSuggestion(){
-  clearTimeout(suggestionTimer);
-  const delay=(Date.now()-lastSuggestionAt<8000)?5000:1500;
-  suggestionTimer=setTimeout(getSuggestions,delay);
-}
-
-async function getSuggestions(){
-  const myText=myTranscript.join(' ').trim();
-  const theirText=qnotes.map(n=>n.text).join(' | ');
-  if(!myText&&!theirText)return;
-  lastSuggestionAt=Date.now();
-  const box=document.getElementById('suggestion-box');
-  box.innerHTML='<span class="spinner"></span><span style="font-size:13px;color:#888;">Thinking...</span>';
-
-  let contextBlock='';
-  if(myText) contextBlock+=`What Ali said:\n"${myText}"\n\n`;
-  if(theirText) contextBlock+=`What the other person said (typed notes):\n"${theirText}"\n\n`;
-  if(extraContext) contextBlock+=`Person Ali is meeting: ${extraContext}\n\n`;
-
-  const prompt=`${contextBlock}Based on all of the above, give 2-3 SHORT, specific, ready-to-use suggestions Ali can say RIGHT NOW. Complete sentences only. Directly address what was last said.\n\nReturn ONLY JSON array, no markdown:\n[{"suggestion":"...","why":"one short reason"}]`;
-
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:800,system:CONTEXT[selectedMode].system,messages:[{role:'user',content:prompt}]})
+  try {
+    // Step 1: List recent meetings via Granola MCP through Anthropic API
+    const listResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 2000,
+        mcp_servers: [{
+          type: 'url',
+          url: 'https://mcp.granola.ai/mcp',
+          name: 'granola'
+        }],
+        messages: [{
+          role: 'user',
+          content: `Use the Granola tool to list my meetings from this week and last week. 
+Return ONLY a JSON array like this, no markdown:
+[{"id":"uuid","title":"meeting title","date":"Apr 3, 2026"}]
+Include up to 10 most recent meetings. Order by most recent first.`
+        }]
+      })
     });
-    const data=await resp.json();
-    if(data.error){box.innerHTML='<p style="color:red;font-size:13px;">'+data.error.message+'</p>';return;}
-    const text=data.content.map(i=>i.text||'').join('');
-    const suggestions=JSON.parse(text.replace(/```json|```/g,'').trim());
-    box.innerHTML=suggestions.map((s,i)=>`
-      <div class="suggestion-item">
-        ${s.suggestion}
-        <div class="suggestion-why">${s.why}</div>
-        <div class="suggestion-feedback">
-          <button class="sfb" onclick="rateSug(${i},'up',this)">👍 Helpful</button>
-          <button class="sfb" onclick="rateSug(${i},'down',this)">👎 Not relevant</button>
-        </div>
-      </div>`).join('');
-  }catch(err){
-    box.innerHTML='<p style="color:red;font-size:13px;">Error: '+err.message+'</p>';
+
+    const listData = await listResp.json();
+    if(listData.error){
+      throw new Error(listData.error.message);
+    }
+
+    // Extract text from response
+    const rawText = listData.content
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('');
+
+    // Parse meetings list
+    const jsonMatch = rawText.match(/\[[\s\S]*\]/);
+    if(!jsonMatch) throw new Error('Could not parse meetings list');
+    meetingsList = JSON.parse(jsonMatch[0]);
+
+    if(!meetingsList.length){
+      status.textContent = 'No recent meetings found in Granola';
+      status.className = 'granola-status err';
+      btn.disabled = false;
+      btnIcon.textContent = '📋';
+      btnText.textContent = 'Import from Granola';
+      return;
+    }
+
+    // Populate picker
+    const picker = document.getElementById('meeting-picker');
+    picker.innerHTML = '<option value="">Select a meeting...</option>' +
+      meetingsList.map((m,i) => `<option value="${i}">${m.date} — ${m.title}</option>`).join('');
+    picker.style.display = 'block';
+
+    status.textContent = `${meetingsList.length} meetings found`;
+    status.className = 'granola-status ok';
+
+    // Auto-load first (most recent)
+    picker.selectedIndex = 1;
+    await loadSelectedMeeting();
+
+  } catch(err) {
+    status.textContent = 'Error: ' + err.message;
+    status.className = 'granola-status err';
+  }
+
+  btn.disabled = false;
+  btnIcon.textContent = '📋';
+  btnText.textContent = 'Refresh';
+}
+
+async function loadSelectedMeeting(){
+  const picker = document.getElementById('meeting-picker');
+  const idx = picker.value;
+  if(idx === '' || !meetingsList[idx]) return;
+
+  const meeting = meetingsList[idx];
+  const status = document.getElementById('granola-status');
+  status.textContent = 'Loading transcript...';
+  status.className = 'granola-status';
+
+  try {
+    const transcriptResp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 4000,
+        mcp_servers: [{
+          type: 'url',
+          url: 'https://mcp.granola.ai/mcp',
+          name: 'granola'
+        }],
+        messages: [{
+          role: 'user',
+          content: `Get the full transcript for meeting ID: ${meeting.id}
+Return ONLY the raw transcript text. No formatting, no headers, no JSON. Just the conversation text as-is.`
+        }]
+      })
+    });
+
+    const transcriptData = await transcriptResp.json();
+    if(transcriptData.error) throw new Error(transcriptData.error.message);
+
+    const transcriptText = transcriptData.content
+      .filter(b => b.type === 'text')
+      .map(b => b.text)
+      .join('');
+
+    document.getElementById('transcript-paste').value = transcriptText;
+    status.textContent = `✓ "${meeting.title}" loaded`;
+    status.className = 'granola-status ok';
+
+  } catch(err) {
+    status.textContent = 'Error loading: ' + err.message;
+    status.className = 'granola-status err';
   }
 }
 
-function rateSug(idx,val,btn){
-  btn.parentElement.querySelectorAll('.sfb').forEach(b=>b.classList.remove('liked','disliked'));
-  btn.classList.add(val==='up'?'liked':'disliked');
-  const fb=JSON.parse(localStorage.getItem('slp_sugfb')||'[]');
-  fb.push({session:currentSessionId,idx,val,mode:selectedMode,time:Date.now()});
-  localStorage.setItem('slp_sugfb',JSON.stringify(fb.slice(-200)));
+// ---- GET SUGGESTION ----
+async function getSuggestion(){
+  const transcript = document.getElementById('transcript-paste').value.trim();
+  if(!transcript){
+    document.getElementById('suggestion-output').innerHTML = '<div class="empty-suggestion">Import or paste a transcript first.</div>';
+    return;
+  }
+
+  const btn = document.getElementById('suggest-btn');
+  const btnContent = document.getElementById('suggest-btn-content');
+  btn.disabled = true;
+  btnContent.innerHTML = '<span class="spinner"></span> Thinking...';
+
+  const prompt = `Here is the meeting transcript:\n"${transcript}"${extraContext ? '\n\nPerson Ali is meeting: ' + extraContext : ''}\n\nBased on the transcript and Ali's goals, give him ONE single best suggestion — the most important thing he should say or ask RIGHT NOW.\n\nReturn ONLY this JSON, no markdown:\n{"suggestion":"...","why":"one short sentence reason"}`;
+
+  try {
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': apiKey,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 400,
+        system: CONTEXT[selectedMode].system,
+        messages: [{ role: 'user', content: prompt }]
+      })
+    });
+
+    const data = await resp.json();
+    if(data.error){ document.getElementById('suggestion-output').innerHTML = '<p style="color:red;font-size:13px;">' + data.error.message + '</p>'; btn.disabled=false; btnContent.innerHTML='💡 Get suggestion'; return; }
+    const text = data.content.map(i => i.text || '').join('');
+    const result = JSON.parse(text.replace(/```json|```/g, '').trim());
+    document.getElementById('suggestion-output').innerHTML = `
+      <div class="suggestion-card">
+        ${result.suggestion}
+        <div class="suggestion-why">${result.why}</div>
+        <div class="suggestion-feedback">
+          <button class="sfb" onclick="rateSug('up',this)">👍 Helpful</button>
+          <button class="sfb" onclick="rateSug('down',this)">👎 Not relevant</button>
+        </div>
+      </div>`;
+  } catch(err) {
+    document.getElementById('suggestion-output').innerHTML = '<p style="color:red;font-size:13px;">Error: ' + err.message + '</p>';
+  }
+  btn.disabled = false;
+  btnContent.innerHTML = '💡 Get suggestion';
 }
 
-// ---- DEBRIEF ----
-async function generateDebrief(){
-  const myText=myTranscript.join(' ').trim();
-  const theirText=qnotes.map(n=>n.text).join('. ');
-  if(!myText&&!theirText){document.getElementById('post-content').textContent='No data yet.';return;}
-  const el=document.getElementById('post-content');
-  el.textContent='Generating...';
-  const prompt=`Meeting data:\nAli said: "${myText}"\nOther person said: "${theirText}"\n\nWrite a structured post-meeting debrief:\n1. Key things the other party said (pain points, objections, interest)\n2. What went well\n3. What could be better\n4. Specific next steps for Ali this week\n5. One insight Ali might have missed\n\nDirect and concise. Plain text, no markdown.`;
-  try{
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':apiKey,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:1000,system:CONTEXT[selectedMode].system,messages:[{role:'user',content:prompt}]})
-    });
-    const data=await resp.json();
-    if(data.error){el.textContent='Error: '+data.error.message;return;}
-    el.textContent=data.content.map(i=>i.text||'').join('');
-  }catch(err){el.textContent='Error: '+err.message;}
+function rateSug(val, btn){
+  btn.parentElement.querySelectorAll('.sfb').forEach(b => b.classList.remove('liked','disliked'));
+  btn.classList.add(val === 'up' ? 'liked' : 'disliked');
 }
 
 // ---- SCORING ----
 function buildScoringRows(){
-  document.getElementById('scoring-rows').innerHTML=INTERN_QS.map((q,i)=>`
+  document.getElementById('scoring-rows').innerHTML = INTERN_QS.map((q,i) => `
     <div class="scoring-row">
       <span class="q-label">${q}</span>
       <button class="score-btn score-good" onclick="setScore(${i},'good',this)">✅ Pass</button>
@@ -479,77 +483,38 @@ function buildScoringRows(){
       <button class="score-btn score-fail" onclick="setScore(${i},'fail',this)">❌ Fail</button>
     </div>`).join('');
 }
-function setScore(qi,val,btn){
-  scores[qi]=val;
-  btn.parentElement.querySelectorAll('.score-btn').forEach(b=>b.classList.remove('active'));
+
+function setScore(qi, val, btn){
+  scores[qi] = val;
+  btn.parentElement.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
-  const el=document.getElementById('score-result');
-  const q1=scores[0],q2=scores[1];
-  if(q1==='fail'||q2==='fail'){el.innerHTML='<b style="color:#c0392b;">❌ Do not proceed — end interview politely.</b>';return;}
-  const goods=Object.values(scores).filter(v=>v==='good').length;
-  if(q1==='good'&&q2==='good'&&goods>=4){el.innerHTML='<b style="color:#0F6E56;">✅ Strong — send 48hr take-home task.</b>';return;}
-  if(q1==='weak'||q2==='weak'){el.innerHTML='<b style="color:#c07000;">⚠️ Maybe — send one clarifying question by email.</b>';return;}
+  const el = document.getElementById('score-result');
+  const q1=scores[0], q2=scores[1];
+  if(q1==='fail'||q2==='fail'){el.innerHTML='<b style="color:#c0392b;">❌ End interview politely.</b>';return;}
+  const goods = Object.values(scores).filter(v => v==='good').length;
+  if(q1==='good'&&q2==='good'&&goods>=4){el.innerHTML='<b style="color:#0F6E56;">✅ Strong — send take-home task.</b>';return;}
+  if(q1==='weak'||q2==='weak'){el.innerHTML='<b style="color:#c07000;">⚠️ Maybe — send clarifying question.</b>';return;}
   el.innerHTML='<span style="color:#888;">Keep scoring...</span>';
 }
 
 // ---- TABS ----
 function switchTab(tab){
-  ['live','brief','score','post'].forEach(t=>{
-    const el=document.getElementById('tab-'+t);
-    if(el)el.style.display=(t===tab)?'block':'none';
+  ['live','brief','score'].forEach(t => {
+    const el = document.getElementById('tab-' + t);
+    if(el) el.style.display = (t === tab) ? 'block' : 'none';
   });
-  document.querySelectorAll('.tab').forEach(t=>{
-    const map={'Live':'live','Brief':'brief','Score':'score','Debrief':'post'};
-    t.classList.toggle('active',map[t.textContent.trim()]===tab);
+  document.querySelectorAll('.tab').forEach(t => {
+    const map = {'Live':'live','Brief':'brief','Score':'score'};
+    t.classList.toggle('active', map[t.textContent.trim()] === tab);
   });
 }
 
-// ---- FEEDBACK ----
-function endMeeting(){
-  stopListening();
+function resetApp(){
   document.getElementById('screen-meeting').classList.remove('active');
-  document.getElementById('screen-feedback').classList.add('active');
-  document.getElementById('feedback-form').style.display='block';
-  currentRating=0;suggFb='';
-  document.querySelectorAll('.star').forEach(s=>s.classList.remove('active'));
-  document.querySelectorAll('.sfb').forEach(b=>b.classList.remove('liked','disliked'));
-  document.getElementById('fb-note').value='';
-  loadHistory();
-}
-function rateMeeting(n){currentRating=n;document.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('active',i<n));}
-function setSuggFb(val,btn){
-  suggFb=val;
-  document.querySelectorAll('#feedback-form .sfb').forEach(b=>b.classList.remove('liked','disliked'));
-  btn.classList.add(val==='yes'?'liked':'disliked');
-}
-function saveFeedback(){
-  const fb=JSON.parse(localStorage.getItem('slp_feedback')||'[]');
-  fb.unshift({id:currentSessionId,mode:selectedMode,rating:currentRating,suggFb,note:document.getElementById('fb-note').value.trim(),date:new Date().toLocaleString('en-CA'),person:extraContext||'—'});
-  localStorage.setItem('slp_feedback',JSON.stringify(fb.slice(-50)));
-  document.getElementById('feedback-form').innerHTML='<p style="color:#0F6E56;font-size:14px;font-weight:600;text-align:center;padding:20px;">✓ Saved! Thank you.</p>';
-  loadHistory();
-}
-function loadHistory(){
-  const fb=JSON.parse(localStorage.getItem('slp_feedback')||'[]');
-  const wrap=document.getElementById('feedback-history');
-  if(!fb.length){wrap.innerHTML='<p style="font-size:13px;color:#bbb;text-align:center;margin-top:10px;">No past feedback yet.</p>';return;}
-  wrap.innerHTML='<p class="section-label" style="margin:16px 0 8px;">Past meetings</p>'+fb.map(f=>`
-    <div class="fb-session">
-      <div class="fb-header"><span class="fb-mode">${f.mode==='ltc'?'LTC':'Intern'}</span><span class="fb-date">${f.date}</span></div>
-      <div style="font-size:12px;color:#888;margin-bottom:4px;">${f.person}</div>
-      <div style="font-size:18px;margin-bottom:4px;">${'★'.repeat(f.rating||0)}${'☆'.repeat(5-(f.rating||0))}</div>
-      ${f.note?`<div style="font-size:13px;color:#444;background:#f9f9f9;border-radius:6px;padding:8px;">"${f.note}"</div>`:''}
-    </div>`).join('');
-}
-function showHistory(){
-  document.getElementById('screen-setup').classList.remove('active');
-  document.getElementById('screen-feedback').classList.add('active');
-  document.getElementById('feedback-form').style.display='none';
-  loadHistory();
-}
-function backToSetup(){
-  document.getElementById('screen-feedback').classList.remove('active');
   document.getElementById('screen-setup').classList.add('active');
+  scores = {};
+  meetingsList = [];
+  document.getElementById('meeting-picker').style.display = 'none';
 }
 </script>
 </body>
